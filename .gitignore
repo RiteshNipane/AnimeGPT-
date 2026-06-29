@@ -1,0 +1,25 @@
+# Model weights (too large for GitHub)
+animegpt-model/
+*.pth
+*.bin
+*.safetensors
+
+# Corpus (auto-generated)
+anime_corpus.txt
+
+# Dataset files
+Dataset/
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
