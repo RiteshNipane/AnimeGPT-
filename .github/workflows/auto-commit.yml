@@ -1,9 +1,9 @@
 
-name: Daily Empty Commit
+name: Random Daily Commits
 
 on:
   schedule:
-    - cron: "17 5 * * *"
+    - cron: "17 4,8,12,16 * * *"
   workflow_dispatch:
 
 permissions:
@@ -17,7 +17,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Decide whether to commit
+        id: decision
+        run: |
+          DAY=$(date -u +%j)
+          COUNT=$(echo "$DAY-$(date -u +%Y)" | cksum | awk '{print $1 % 4 + 1}')
+          HOUR=$(date -u +%H)
+
+          case "$HOUR" in
+            04) SLOT=1 ;;
+            08) SLOT=2 ;;
+            12) SLOT=3 ;;
+            16) SLOT=4 ;;
+            *) SLOT=0 ;;
+          esac
+
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] || [ "$SLOT" -le "$COUNT" ]; then
+            echo "commit=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "commit=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Create empty commit
+        if: steps.decision.outputs.commit == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
