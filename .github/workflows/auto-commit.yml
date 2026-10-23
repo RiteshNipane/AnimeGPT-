@@ -3,7 +3,7 @@ name: Daily Empty Commit
 
 on:
   schedule:
-    - cron: "30 4 * * *"
+    - cron: "17 5 * * *"
   workflow_dispatch:
 
 permissions:
